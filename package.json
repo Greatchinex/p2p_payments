@@ -1,0 +1,54 @@
+{
+  "name": "payments",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "clean": "rm -rf build && mkdir build",
+    "build": "yarn clean && yarn build-server",
+    "build-server": "tsc",
+    "start": "yarn build && nodemon build/index.js",
+    "stage": "yarn build && pm2 start --name 'payments-stage' build/index.js",
+    "restart": "pm2 restart payments-stage",
+    "lint": "eslint . --ext=.ts",
+    "format": "prettier --write ."
+  },
+  "pre-commit": [
+    "format",
+    "lint"
+  ],
+  "dependencies": {
+    "@typegoose/typegoose": "^9.8.1",
+    "argon2": "^0.28.5",
+    "bluebird": "^3.7.2",
+    "cors": "^2.8.5",
+    "crypto-random-string": "^4.0.0",
+    "dayjs": "^1.11.1",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.3.0",
+    "nodemon": "^2.0.15",
+    "pino": "^7.10.0",
+    "reflect-metadata": "^0.1.13",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/bluebird": "^3.5.36",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/jsonwebtoken": "^8.5.8",
+    "@typescript-eslint/eslint-plugin": "^5.20.0",
+    "@typescript-eslint/parser": "^5.20.0",
+    "eslint": "^8.13.0",
+    "eslint-config-prettier": "^8.5.0",
+    "pino-pretty": "^7.6.1",
+    "pre-commit": "^1.2.2",
+    "prettier": "^2.6.2",
+    "ts-node": "^10.7.0",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "4.5.2"
+  }
+}
