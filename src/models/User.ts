@@ -11,7 +11,7 @@ import { config } from 'dotenv'
 
 config()
 
-enum VerificationStatus {
+export enum VerificationStatus {
   approved = 'approved',
   flagged = 'flagged'
 }

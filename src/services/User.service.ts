@@ -1,11 +1,13 @@
 import { startSession } from 'mongoose'
 import { StatusCodes } from 'http-status-codes'
 
-import { User } from '../models/User'
+import { User, VerificationStatus } from '../models/User'
 import { Wallet, WalletType } from '../models/Wallet'
 
 import Logger from '../config/logger'
+import { validateAttempts } from '../helpers/validateAttempts'
 import signupValidator from '../validators/signupValidator'
+import loginValidator from '..//validators/loginValidator'
 
 class UserService {
   public async signup(payload: any) {
@@ -83,6 +85,75 @@ class UserService {
     } finally {
       if (session) {
         session.endSession()
+      }
+    }
+  }
+
+  public async login(payload: any) {
+    Logger.info('User Login: Payload ===> %o', payload)
+    const validate = await loginValidator(payload)
+
+    if (!validate.success) {
+      return {
+        message: validate.message,
+        sucess: validate.success,
+        status: validate.status
+      }
+    }
+
+    const lowercase = payload.email.toLowerCase()
+    try {
+      const user = await User.findOne({ email: lowercase, deletedAt: null }).select([
+        '+password',
+        '+password_retries'
+      ])
+
+      if (!user) {
+        return {
+          message: 'Incorrect login details',
+          success: false,
+          status: StatusCodes.NOT_FOUND
+        }
+      }
+
+      if (user.status === VerificationStatus.flagged) {
+        return {
+          message: user.flagged_for ?? 'Your account has been flagged, Please contact support',
+          success: false,
+          status: StatusCodes.UNAUTHORIZED
+        }
+      }
+
+      const validatePassword = await user.verifyPass(payload.password)
+
+      if (!validatePassword) {
+        const retries = user.password_retries + 1
+        await validateAttempts.validatePasswordAttempt(User, user._id, retries)
+        return {
+          message: 'Incorrect login details',
+          success: false,
+          status: StatusCodes.NOT_FOUND
+        }
+      }
+
+      const flagged_for: any = null
+
+      await User.findByIdAndUpdate(user._id, { password_retries: 0, flagged_for })
+
+      const token = user.authToken()
+
+      return {
+        message: token,
+        success: true,
+        status: StatusCodes.OK
+      }
+    } catch (error) {
+      Logger.error({ err: error }, 'User Login: Failed to login user')
+
+      return {
+        message: 'Failed to login user',
+        success: false,
+        status: StatusCodes.INTERNAL_SERVER_ERROR
       }
     }
   }

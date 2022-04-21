@@ -2,11 +2,8 @@ import * as Joi from 'joi'
 
 export default async (body: any) => {
   try {
-    const signupSchema = Joi.object().keys({
-      fname: Joi.string().required(),
-      lname: Joi.string().required(),
+    const loginSchema = Joi.object().keys({
       email: Joi.string().email().required(),
-      phone_number: Joi.string().required().min(11).max(13),
       password: Joi.string().min(7).max(15).required().messages({
         'string.base': "password should be a type of 'text'",
         'string.empty': 'password cannot be empty',
@@ -15,7 +12,7 @@ export default async (body: any) => {
       })
     })
 
-    const data = await signupSchema.validateAsync(body)
+    const data = await loginSchema.validateAsync(body)
 
     if (data.error) {
       return {

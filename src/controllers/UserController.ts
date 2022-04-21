@@ -47,8 +47,41 @@ class UserController {
     }
   }
 
-  public login(_: Request, res: Response) {
-    res.json({ success: true, message: 'Hello from login' })
+  public async login(request: Request, response: Response) {
+    try {
+      const resp = await this._userService.login(request.body)
+
+      if (!resp.success) {
+        return this._requestResponses.handleErrorResponse({
+          request,
+          response,
+          message: resp.message,
+          http_code: resp.status!,
+          log_body: false,
+          data: {}
+        })
+      }
+
+      return this._requestResponses.handleSuccessResponse({
+        request,
+        response,
+        message: 'Login successful',
+        http_code: resp.status!,
+        log_body: false,
+        data: {
+          token: resp.message
+        }
+      })
+    } catch (error) {
+      return this._requestResponses.handleErrorResponse({
+        request,
+        response,
+        message: error.message,
+        http_code: StatusCodes.INTERNAL_SERVER_ERROR,
+        log_body: false,
+        error
+      })
+    }
   }
 }
 
