@@ -21,6 +21,8 @@
   "dependencies": {
     "@typegoose/typegoose": "^9.8.1",
     "argon2": "^0.28.5",
+    "async-mutex": "^0.3.2",
+    "axios": "^0.26.1",
     "bluebird": "^3.7.2",
     "cors": "^2.8.5",
     "crypto-random-string": "^4.0.0",
