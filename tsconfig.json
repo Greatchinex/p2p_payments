@@ -7,6 +7,7 @@
     "outDir": "./build",
     "moduleResolution": "node",
     "declaration": false,
+    "typeRoots": ["./src/typings", "./node_modules/@types"],
 
     "composite": false,
     "removeComments": true,

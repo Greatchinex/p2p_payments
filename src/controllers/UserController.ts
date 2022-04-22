@@ -83,6 +83,32 @@ class UserController {
       })
     }
   }
+
+  public async me(request: Request, response: Response) {
+    try {
+      const resp = await this._userService.me(request.user!.user_id)
+
+      return this._requestResponses.handleSuccessResponse({
+        request,
+        response,
+        message: 'Profile fetched successfully',
+        http_code: StatusCodes.OK,
+        log_body: true,
+        data: {
+          user: resp
+        }
+      })
+    } catch (error) {
+      return this._requestResponses.handleErrorResponse({
+        request,
+        response,
+        message: error.message,
+        http_code: StatusCodes.INTERNAL_SERVER_ERROR,
+        log_body: true,
+        error
+      })
+    }
+  }
 }
 
 export const userController = new UserController(userService, requestResponses)

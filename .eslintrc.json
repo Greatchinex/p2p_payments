@@ -57,6 +57,7 @@
     "@typescript-eslint/radix": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
+    "no-useless-catch": "off",
     "eol-last": "warn",
     "key-spacing": "warn",
     "padded-blocks": "off",

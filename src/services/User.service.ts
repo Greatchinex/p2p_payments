@@ -157,6 +157,14 @@ class UserService {
       }
     }
   }
+
+  public async me(user_id: string | object) {
+    try {
+      return await User.findById(user_id)
+    } catch (error) {
+      throw error
+    }
+  }
 }
 
 const userService = new UserService()
