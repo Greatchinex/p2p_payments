@@ -16,6 +16,18 @@ app.use(cors())
 
 routes(app)
 
+app.get('/', (_, response) => {
+  const welcome = {
+    status: true,
+    message: 'Welcome to Payments',
+    data: {
+      api: 'Core Service'
+    }
+  }
+
+  response.status(200).json(welcome)
+})
+
 app.listen(port, () => {
   Logger.info('Server is listening on port %s', port)
 })
