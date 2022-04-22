@@ -7,7 +7,7 @@ import { Wallet, WalletType } from '../models/Wallet'
 import Logger from '../config/logger'
 import { validateAttempts } from '../helpers/validateAttempts'
 import signupValidator from '../validators/signupValidator'
-import loginValidator from '..//validators/loginValidator'
+import loginValidator from '../validators/loginValidator'
 
 class UserService {
   public async signup(payload: any) {

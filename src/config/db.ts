@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import bluebird from 'bluebird'
 import { config } from 'dotenv'
 
-import Logger from './Logger'
+import Logger from './logger'
 ;(<any>mongoose).Promise = bluebird
 
 config()
