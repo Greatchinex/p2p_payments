@@ -58,6 +58,44 @@ class TransferController {
       })
     }
   }
+
+  public async sendToWallet(request: Request, response: Response) {
+    try {
+      const resp = await this._transferService.sendToWallet(
+        request.body,
+        request!.balance,
+        request.user!.user_id
+      )
+
+      if (!resp.success) {
+        return this._requestResponses.handleErrorResponse({
+          request,
+          response,
+          message: resp.message,
+          http_code: resp.status!,
+          log_body: false
+        })
+      }
+
+      return this._requestResponses.handleSuccessResponse({
+        request,
+        response,
+        message: resp.message,
+        http_code: resp.status!,
+        log_body: false,
+        data: {}
+      })
+    } catch (error) {
+      return this._requestResponses.handleErrorResponse({
+        request,
+        response,
+        message: error.message,
+        http_code: StatusCodes.INTERNAL_SERVER_ERROR,
+        log_body: false,
+        error
+      })
+    }
+  }
 }
 
 export const transferController = new TransferController(transferService, requestResponses)

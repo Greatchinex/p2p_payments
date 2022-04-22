@@ -16,7 +16,7 @@ const semaphore = new Semaphore(maxConcurrentRequests)
 config()
 
 class WalletService {
-  private async insertTransaction(payload: saveTransactionType, session?: any) {
+  public async insertTransaction(payload: saveTransactionType, session?: any) {
     const transaction = {
       ...payload,
       amount: payload.type === TransactionType.debit ? -payload.amount : payload.amount
