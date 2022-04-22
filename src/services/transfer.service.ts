@@ -23,7 +23,7 @@ class TransferService {
         amount,
         email: user.email,
         currency: 'NGN',
-        reference: `ref_${uuidv4()}${Date.now()}`,
+        reference: `ref_${uuidv4()}-${Date.now()}`,
         callback_url: 'https://www.summitech.ng/',
         channels: ['card'],
         metadata: {

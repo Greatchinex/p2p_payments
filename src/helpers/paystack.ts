@@ -35,7 +35,11 @@ class PaystackHelper {
       }
     } catch (error) {
       const errResp = error.response?.data?.message ?? 'Could not initiate funding'
-      Logger.error('Paystack Error: Failed to Initiate Funding ===> %o', error.response?.data)
+      Logger.error(
+        'Paystack Error: Failed to Initiate Funding ===> %o, ===> %s',
+        error.response?.data,
+        error.message
+      )
       return {
         message: errResp,
         status: false,
@@ -45,24 +49,9 @@ class PaystackHelper {
   }
 
   public async verifyTransaction(reference: string) {
-    try {
-      const { data } = await this.paystackConnect().get(`transaction/verify/${reference}`)
+    const { data } = await this.paystackConnect().get(`transaction/verify/${reference}`)
 
-      return {
-        message: data.message,
-        status: data.status,
-        data: data.data
-      }
-    } catch (error) {
-      const errResp = error.response?.data?.message ?? 'Could not verify transaction'
-      Logger.error('Paystack Error: Failed to verify transaction ===> %o', error.response?.data)
-
-      return {
-        message: errResp,
-        status: false,
-        data: null
-      }
-    }
+    return data.data
   }
 
   public async resolveAcctNumber({ account_number, bank_code }: IResolveAcctNumber) {
